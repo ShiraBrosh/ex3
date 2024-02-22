@@ -10,6 +10,7 @@ void printTotalCharCount(const StrList* list);
 void printStringOccurrences(StrList* list);
 void removeStringOccurrences(StrList* list);
 void removeStringAtIndex(StrList* list);
+void reverseList(StrList* list);
 void clearList(StrList* list);
 void sortList(StrList* list);
 void checkSorted(StrList* list);
@@ -49,12 +50,15 @@ StrList* list = StrList_alloc();
             removeStringAtIndex(list);
         }
         else if(choice == 10) {
-            clearList(list);
+            reverseList(list);
         }
         else if(choice == 11) {
-            sortList(list);
+            clearList(list);
         }
         else if(choice == 12) {
+            sortList(list);
+        }
+         else if(choice == 13) {
             checkSorted(list);
         }
     }
@@ -66,12 +70,10 @@ StrList* list = StrList_alloc();
 
 void insertStrings(StrList* list) {
     int numStrings;
-    printf("Enter the number of words you want to insert: ");
     scanf("%d", &numStrings);
 
     for (int i = 0; i < numStrings; i++) {
         char word[100];
-        printf("Enter word %d: ", i + 1);
         scanf("%s", word);
         StrList_insertLast(list, word);
     }
@@ -80,68 +82,64 @@ void insertStrings(StrList* list) {
 void insertStringAtIndex(StrList* list) {
     int index;
     char word[100];
-    printf("Enter the index to insert the word: ");
     scanf("%d", &index);
-    printf("Enter the word to insert: ");
     scanf("%s", word);
     StrList_insertAt(list, word, index);
 }
 
 void printList(const StrList* list) {
-    printf("List contents:\n");
     StrList_print(list);
+    printf("\n");
 }
 
 void printListLength(const StrList* list) {
-    printf("Length of the list: %zu\n", StrList_size(list));
+    printf("%zu\n", StrList_size(list));
 }
 
 void printStringAtIndex(const StrList* list) {
     int index;
-    printf("Enter the index of the string to print: ");
     scanf("%d", &index);
     StrList_printAt(list, index);
 }
 
 void printTotalCharCount(const StrList* list) {
-    printf("Total number of characters in the list: %d\n", StrList_printLen(list));
+    printf("%d\n", StrList_printLen(list));
 }
 
 void printStringOccurrences(StrList* list) {
     char word[100];
-    printf("Enter the word to count occurrences: ");
     scanf("%s", word);
-    printf("Occurrences of '%s': %d\n", word, StrList_count(list, word));
+    printf("%d\n", StrList_count(list, word));
 }
 
 void removeStringOccurrences(StrList* list) {
     char word[100];
-    printf("Enter the word to remove occurrences: ");
     scanf("%s", word);
     StrList_remove(list, word);
 }
 
 void removeStringAtIndex(StrList* list) {
     int index;
-    printf("Enter the index of the string to remove: ");
     scanf("%d", &index);
     StrList_removeAt(list, index);
 }
 
+void reverseList(StrList* list) {
+    StrList_reverse(list); 
+}
+
 void clearList(StrList* list) {
     StrList_free(list);
-    printf("List cleared.\n");
 }
 
 void sortList(StrList* list) {
     StrList_sort(list);
-    printf("List sorted in lexicographical order.\n");
 }
 
 void checkSorted(StrList* list) {
     if (StrList_isSorted(list)) {
-        printf("The list is arranged in lexicographical order.\n");
+        printf("true\n");
     } else {
-        printf("The list is not arranged in lexicographical order.\n");
+        printf("false\n");
     }
 }
