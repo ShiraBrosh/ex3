@@ -7,11 +7,11 @@ FP = -fPIC
 
 all: StrList
 
-StrList: Main.o StrList.o
-	$(CC) -o StrList Main.o StrList.o $(CFLAGS)
+StrList: main.o StrList.o
+	$(CC) -o StrList main.o StrList.o $(CFLAGS)
 
-Main.o: Main.c
-	$(CC) $(CFLAGS) $(FP) -c Main.c -o Main.o
+main.o: main.c
+	$(CC) $(CFLAGS) $(FP) -c main.c -o main.o
 
 StrList.o: StrList.c StrList.h
 	$(CC) $(CFLAGS) $(FP) -c StrList.c -o StrList.o
