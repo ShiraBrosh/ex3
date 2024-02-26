@@ -1,7 +1,7 @@
 #pragma once
-#include <string.h>
+
 #include <stdlib.h>
-#include <stdio.h>
+
 /********************************************************************************
  *
  * A StrList library.
@@ -39,7 +39,8 @@ size_t StrList_size(const StrList* StrList);
 /*
  * Inserts an element in the end of the StrList.
  */
-void StrList_insertLast(StrList* StrList, const char* data);
+void StrList_insertLast(StrList* StrList,
+					  const char* data);
 
 /*
 * Inserts an element at given index
@@ -102,10 +103,12 @@ void StrList_reverse( StrList* StrList);
 /*
  * Sort the given list in lexicographical order 
  */
-void StrList_sort( StrList* StrList);
+void StrList_sort(StrList* StrList);
 
 /*
  * Checks if the given list is sorted in lexicographical order
  * returns 1 for sorted,   0 otherwise
  */
 int StrList_isSorted(StrList* StrList);
+
+//void StrList_free_reverse(StrList* StrList);

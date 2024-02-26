@@ -1,129 +1,177 @@
-#include <stdio.h>
 #include "StrList.h"
+#include <stdio.h>
+#include <stdlib.h> // Include stdlib.h for the exit function
+#include <string.h> // Add this line to include the string.h header file
 
-int main() {
+void insertStrings(StrList* list, char **input);
+void insertStringAtIndex(StrList* list);
+void printList(const StrList* list);
+void printListLength(const StrList* list);
+void printStringAtIndex(const StrList* list);
+void printTotalCharCount(const StrList* list);
+void printStringOccurrences(StrList* list);
+void removeStringOccurrences(StrList* list);
+void removeStringAtIndex(StrList* list);
+void reverseList(StrList* list);
+void clearList(StrList** list);
+void sortList(StrList* list);
+void checkSorted(StrList* list);
 
+int main (){
+    int choice = 20;  // Initialize choice to any non-0 value
     StrList* list = StrList_alloc();
-     int index2=0;
-     char sentence[500];  
-    int wordCnt=0,choice = 0,index =0;
-    
-    //switch case of 1-13 +0 
-      
-   do {
-      // printf("enter your choice \n");
-       scanf("%d",&choice);
-        getchar();
+    char *input = NULL;   // Initialize input pointer to NULL
 
-
+    while (1) {
+        scanf(" %d",&choice);
         switch (choice) {
-           
-           case 0:
-                exit(0);
-            break;
-           
-           
             case 1:
-             //the scan func
-    
-    //printf("enter the number of word \n");
-    scanf("%d",&wordCnt);
-    getchar();
-    
-    //printf("Enter a sentence: ");
-    fgets(sentence, sizeof(sentence), stdin);
-
-
-    // Tokenize the sentence into words and insert each word into the StrList
-    char* token = strtok(sentence, " ");
-    while (token != NULL) {
-        // Remove newline character if present
-        if (token[strlen(token) - 1] == '\n') {
-            token[strlen(token) - 1] = '\0';
-        }
-        StrList_insertLast(list, token);  // Insert the word into the StrList
-        token = strtok(NULL, " ");  // Move to the next word
-    }
-                
+                insertStrings(list, &input);
                 break;
-            case 2:// Insert string in some index
-                   // printf("enter index\n");
-                    scanf("%d", &index);
-                   // printf("enter word\n");
-                    scanf("%s", sentence);
-                    StrList_insertAt(list, sentence, index);
-        
+            case 2:
+                insertStringAtIndex(list);
                 break;
-             case 3: //print the list
-                    StrList_print(list);
-                    break;
+            case 3:
+                printList(list);
+                break;
             case 4:
-                   printf("%zu\n", StrList_size(list));
-                    break;
+                printListLength(list);
+                break;
             case 5:
-               // printf("5 -enter index");
-                scanf("%d", &index2);
-                StrList_printAt(list ,index2);
-                    break;
+                printStringAtIndex(list);
+                break;
             case 6:
-                printf("%d\n", StrList_printLen(list)); 
-                    break;
+                printTotalCharCount(list);
+                break;
             case 7:
-                //printf("7- enter a string");
-                scanf("%s", sentence);
-                printf("%d\n",StrList_count(list,sentence));
-                    break;
+                printStringOccurrences(list);
+                break;
             case 8:
-                //printf("8 -enter a string");
-                scanf("%s", sentence);
-                StrList_remove(list,sentence);
-                     break;
+                removeStringOccurrences(list);
+                break;
             case 9:
-                //printf(" 9 -enter index");
-                scanf("%d", &index2);
-                StrList_removeAt(list,index2);
-                     break;
+                removeStringAtIndex(list);
+                break;
             case 10:
-               StrList_reverse(list);
-                     break;
+                reverseList(list);
+                break;
             case 11:
-                StrList_free(list);
-                     break;
+                clearList(&list);
+                break;
             case 12:
-               StrList_sort(list);
-
-                     break;
+                sortList(list);
+                break;
             case 13:
-                if(StrList_isSorted(list)){
-                printf("true\n");
-            }
-                else {
-                printf("false\n");
-            }
-                     break;    
+                checkSorted(list);
+                break;
+            case 0:
+                StrList_free(list);
+                free(input); // Free memory allocated for input
+                exit(0);
             default:
-                    printf("Invalid choice\n");
-                     break;
+                printf("Invalid option!\n");
         }
-       
     }
-   
-   while(choice !=0);
-   
- 
-
-    // // Print the contents of the list
-    // printf("Words in the list:\n");
-    // StrList_print(list);
-
-    // Free the memory allocated for the list
-    StrList_free(list);
-
-   
-    
     return 0;
 }
 
 
+void insertStrings(StrList* list, char **input) {
+    int num_words;
+    scanf(" %d", &num_words);
+    
+    // Allocate memory for input buffer
+    *input = (char *)malloc(1000 * sizeof(char));
+    
+    while (getchar() != '\n');  // waits for user to input enter
 
- 
+    // Read the entire line of input to accommodate multiple words with spaces:
+    fgets(*input, 1000, stdin);  // Use sizeof(input) instead of hardcoding size
+
+    // Newline is also included, so we will replace it with null terminator
+    int len = strlen(*input);
+    if ((*input)[len - 1] == '\n') {
+        (*input)[len - 1] = '\0'; 
+    }
+
+    // Extract individual words from the input line, validate word length, and insert:
+    char *token = strtok(*input, " "); // Get first word (or NULL if none)
+
+    while (token != NULL) {
+        // Insert the word at the end of the list using StrList_insertLast:
+        StrList_insertLast(list, token);
+        // Get the next word:
+        token = strtok(NULL, " ");
+    }
+}
+
+
+void insertStringAtIndex(StrList* list) {
+    int index;
+    char word[100];
+    scanf("%d", &index);
+    scanf("%s", word);
+    StrList_insertAt(list, word, index);
+}
+
+void printList(const StrList* list) {
+   printf("list: %p\n", list);
+    if (list == NULL) {
+        return;
+    }
+    StrList_print(list);
+    printf("\n");
+}
+
+void printListLength(const StrList* list) {
+    printf("%zu\n", StrList_size(list));
+}
+
+void printStringAtIndex(const StrList* list) {
+    int index;
+    scanf("%d", &index);
+    StrList_printAt(list, index);
+}
+
+void printTotalCharCount(const StrList* list) {
+    printf("%d\n", StrList_printLen(list));
+}
+
+void printStringOccurrences(StrList* list) {
+    char word[100];
+    scanf("%s", word);
+    printf("%d\n", StrList_count(list, word));
+}
+
+void removeStringOccurrences(StrList* list) {
+    char word[100];
+    scanf("%s", word);
+    StrList_remove(list, word);
+}
+
+void removeStringAtIndex(StrList* list) {
+    int index;
+    scanf("%d", &index);
+    StrList_removeAt(list, index);
+}
+
+void reverseList(StrList* list) {
+    StrList_reverse(list); 
+}
+
+void clearList(StrList** list) {
+    StrList_free(*list);
+    *list = NULL;
+    printf("lililiil: %p\n", *list);
+}
+void sortList(StrList* list) {
+    StrList_sort(list);
+}
+
+void checkSorted(StrList* list) {
+    if (StrList_isSorted(list)) {
+        printf("true\n");
+    } else {
+        printf("false\n");
+    }
+}

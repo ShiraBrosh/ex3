@@ -1,26 +1,20 @@
-CC=gcc
-AR=ar
-FLAGS= -Wall -g
+CFLAGS = -Wall -g -Wextra -std=gnu99
+CC = gcc
+AR = ar
+FP = -fPIC
 
-all:  StrList
+.PHONY: all clean
 
-# Rule to build the library 'libStrList.a'
-libStrList.a: StrList.o
-	ar rcs libStrList.a StrList.o
+all: StrList
 
-# Rule to compile my_graph.c into an object file
-StrList.o: StrList.c StrList.h 
-	$(CC) $(FLAGS) -c StrList.c -fPIC
+StrList: Main.o StrList.o
+	$(CC) -o StrList Main.o StrList.o $(CFLAGS)
 
- #Rule to compile Main.c into an object file
-Main.o: Main.c StrList.h
-	$(CC) $(FLAGS) -c Main.c -o Main.o
+Main.o: Main.c
+	$(CC) $(CFLAGS) $(FP) -c Main.c -o Main.o
 
-# Rule to link the executable with the library
-StrList: Main.o libStrList.a
-	$(CC) $(FLAGS) Main.o -L. -lStrList -o StrList
-
-.PHONY: clean all
+StrList.o: StrList.c StrList.h
+	$(CC) $(CFLAGS) $(FP) -c StrList.c -o StrList.o
 
 clean: 
-	rm -f *.o *.a *.so StrList
+	rm -f *.o *.a StrList 
