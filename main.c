@@ -103,6 +103,8 @@ void insertStrings(StrList* list, char **input) {
         // Get the next word:
         token = strtok(NULL, " ");
     }
+    free(*input);
+
 }
 
 

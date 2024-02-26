@@ -39,21 +39,37 @@ void Node_free(Node* node){
     free(node);
 }
 
-// Frees the memory allocated for the StrList
+// // Frees the memory allocated for the StrList
+// void StrList_free(StrList* StrList){
+//     Node* preset= StrList->head;
+//     while(preset != NULL){
+//         Node* next= preset->next;
+//         Node_free(preset);
+//         preset=next;
+//     }
+//     free(StrList);
+//     StrList = NULL;
+//     if (StrList != NULL) {
+//         printf("list: %ld\n", StrList->size);
+//     } else {
+//         printf("StrList is NULL\n");
+//     }
+// }
+
 void StrList_free(StrList* StrList){
-    Node* preset= StrList->head;
-    while(preset != NULL){
-        Node* next= preset->next;
-        Node_free(preset);
-        preset=next;
+    if (StrList==NULL) return;
+    Node* p1 = StrList-> _head;
+    Node* p2;
+    while(p1) {
+        p2 =p1;
+        p1 = p1->_next;
+        Node_free(p2);
     }
-    free(StrList);
-    StrList = NULL;
-    if (StrList != NULL) {
-        printf("list: %ld\n", StrList->size);
-    } else {
-        printf("StrList is NULL\n");
-    }
+     //StrList->_head = NULL;
+    // free(StrList);
+    // StrList = NULL;
+    StrList->_head = NULL;
+    StrList->_size = 0;
 }
 
 // Returns the number of elements in the StrList
