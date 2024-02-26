@@ -1,4 +1,4 @@
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -Wextra -std=gnu99
 CC = gcc
 AR = ar
 FP = -fPIC
@@ -7,17 +7,14 @@ FP = -fPIC
 
 all: StrList
 
-StrList: Main.o Lib_StrList.a
-	$(CC) -o StrList Main.o Lib_StrList.a $(CFLAGS)
+StrList: main.o StrList.o
+	$(CC) -o StrList main.o StrList.o $(CFLAGS)
+
+main.o: main.c
+	$(CC) $(CFLAGS) $(FP) -c main.c -o main.o
 
 StrList.o: StrList.c StrList.h
 	$(CC) $(CFLAGS) $(FP) -c StrList.c -o StrList.o
 
-Main.o: Main.c
-	$(CC) $(CFLAGS) $(FP) -c Main.c -o Main.o
-
-Lib_StrList.a: StrList.o
-	$(AR) -rcs Lib_StrList.a StrList.o 
-
 clean: 
-	rm -f *.o *.a StrList
+	rm -f *.o *.a StrList 

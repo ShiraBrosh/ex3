@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h> 
 
 // Define the structure of Node
 typedef struct Node {
@@ -24,7 +25,7 @@ StrList* StrList_alloc() {
 }
 
 Node* Node_alloc(const char* data, Node* next){
-    Node node = (Node)malloc(sizeof(Node));
+    Node *node = (Node*)malloc(sizeof(Node));
     if(node!=NULL){
         node-> data = strdup(data);
         node-> next = next;
@@ -47,6 +48,12 @@ void StrList_free(StrList* StrList){
         preset=next;
     }
     free(StrList);
+    StrList = NULL;
+    if (StrList != NULL) {
+        printf("list: %ld\n", StrList->size);
+    } else {
+        printf("StrList is NULL\n");
+    }
 }
 
 // Returns the number of elements in the StrList
@@ -60,8 +67,7 @@ void StrList_insertLast(StrList* list, const char* data) {
     if (newNode == NULL) {                                       //Memory allocation failed
         return;
     }
-
-    
+        
     newNode->data = strdup(data);                               // Allocate memory for the string data and copy it
     if (newNode->data == NULL) {                                //Memory allocation failed
         free(newNode);
@@ -122,10 +128,10 @@ void StrList_print(const StrList* StrList) {
     if (StrList != NULL) {
         Node* current = StrList-> head;
         for (size_t i = 0; i < StrList->size-1; ++i) {
-            printf("%s\n", current -> data);
+            printf("%s ", current -> data);
             current = current-> next;
         }
-            printf("%s\n", current-> data);
+            printf("%s", current-> data);
     }
 }
 
@@ -268,31 +274,49 @@ void StrList_reverse(StrList* StrList) {
     Node* next = NULL;
 
     while (current != NULL) {
-        next = current->next;
-        current->next = prev;
-        prev = current;
-        current = next;
+        next = current->next;  
+        current->next = prev;  
+        prev = current;        
+        current = next;        
     }
-    StrList->head = prev;
+    StrList->head = prev; 
 }
 
 
-// Helper function to compare two strings for lexicographical sorting
+// Helper function to calculate the Husky code for a character
+int huskyCode(char c) {
+    if (isupper(c)) {
+        return c - 'A';
+    } else {
+        return c - 'a' + 26; 
+    }
+}
+
+// Helper function to compare two strings based on their Husky code of the first letter
 int compareStrings(const void* a, const void* b) {
-    return strcmp((const char)a, *(const char*)b);
+    const char* str1 = *(const char**)a;
+    const char* str2 = *(const char**)b;
+
+    int huskyCode1 = huskyCode(str1[0]);
+    int huskyCode2 = huskyCode(str2[0]);
+
+    if (huskyCode1 < huskyCode2) {
+        return -1;
+    } else if (huskyCode1 > huskyCode2) {
+        return 1;
+    } else {
+        return strcmp(str1, str2);
+    }
 }
 
 // Sorts the given list in lexicographical order 
 void StrList_sort(StrList* StrList) {
-    // Count the number of elements in the list
     size_t count = StrList_size(StrList);
 
-    // Create an array to store the strings
     char* strings[count];
     size_t index = 0;
     Node* current = StrList->head;
 
-    // Traverse the list and store the strings in the array
     while (current != NULL) {
         strings[index++] = current->data;
         current = current->next;
@@ -301,14 +325,14 @@ void StrList_sort(StrList* StrList) {
     // Sort the array of strings
     qsort(strings, count, sizeof(char*), compareStrings);
 
-    // Update the list with sorted strings
     index = 0;
     current = StrList->head;
     while (current != NULL) {
-        strcpy(current->data, strings[index++]);
+        current->data = strdup(strings[index++]);
         current = current->next;
     }
 }
+
 
 // Checks if the given list is sorted in lexicographical order
 // returns 1 for sorted, 0 otherwise
