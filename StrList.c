@@ -58,18 +58,18 @@ void Node_free(Node* node){
 
 void StrList_free(StrList* StrList){
     if (StrList==NULL) return;
-    Node* p1 = StrList-> _head;
+    Node* p1 = StrList-> head;
     Node* p2;
     while(p1) {
         p2 =p1;
-        p1 = p1->_next;
+        p1 = p1->next;
         Node_free(p2);
     }
      //StrList->_head = NULL;
     // free(StrList);
     // StrList = NULL;
-    StrList->_head = NULL;
-    StrList->_size = 0;
+    StrList->head = NULL;
+    StrList->size = 0;
 }
 
 // Returns the number of elements in the StrList
