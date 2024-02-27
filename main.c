@@ -118,6 +118,7 @@ void insertStringAtIndex(StrList* list) {
 
 void printList(const StrList* list) {
     if (list == NULL) {
+    printf("\n");
         return;
     }
     StrList_print(list);
