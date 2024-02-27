@@ -115,7 +115,6 @@ void insertStringAtIndex(StrList* list) {
 }
 
 void printList(const StrList* list) {
-   printf("list: %p\n", list);
     if (list == NULL) {
         return;
     }
@@ -162,7 +161,6 @@ void reverseList(StrList* list) {
 void clearList(StrList** list) {
     StrList_free(*list);
     *list = NULL;
-    printf("lililiil: %p\n", *list);
 }
 void sortList(StrList* list) {
     StrList_sort(list);
