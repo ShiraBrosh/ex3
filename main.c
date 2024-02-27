@@ -65,7 +65,9 @@ int main (){
                 checkSorted(list);
                 break;
             case 0:
+                if(list){
                 StrList_free(list);
+                }
                 free(input); // Free memory allocated for input
                 exit(0);
             default:
